@@ -1,0 +1,23 @@
+{
+  "name": "logger",
+  "private": true,
+  "version": "0.0.0",
+  "description": "winston wrapper",
+  "main": "index.js",
+  "scripts": {
+    "test": "node_modules/.bin/tape test/test.js | node_modules/.bin/tap-spec",
+    "check": "node_modules/.bin/standard --fix",
+    "fix": "node_modules/.bin/standard-format -w",
+    "coverage": "node_modules/.bin/istanbul cover test/test.js"
+  },
+  "devDependencies": {
+    "istanbul": "^0.4.5",
+    "standard": "^8.1.0",
+    "standard-format": "^2.2.2",
+    "tap-spec": "^4.1.1",
+    "tape": "^4.6.0"
+  },
+  "dependencies": {
+    "winston": "^2.2.0"
+  }
+}
