@@ -1,10 +1,10 @@
-var index = require('..')
+var Logger = require('..')
 var test = require('tape')
 
 var conf =
 {
-  toto: {
-    type: 'console',
+  konsole: {
+    type: 'Console',
     opts: {
       level: 'silly',
       colorize: true,
@@ -13,39 +13,62 @@ var conf =
       prettyPrint: true
     }
   },
-  tata: {
-    type: 'file',
+  file: {
+    type: 'File',
     opts: {
       name: 'first',
       filename: 'test.log',
-      level: 'error',
+      level: 'silly',
       json: false,
       handleExceptions: true,
       maxsize: 1048576,
       maxFiles: 5
     }
   },
-    rktr: {
-    type: 'file',
+  http: {
+    type: 'Http',
     opts: {
-      name: 'second',
-      filename: 'test2.log',
-      level: 'info',
-      json: false,
-      handleExceptions: true,
-      maxsize: 1048576,
-      maxFiles: 5
+      level: 'warn',
+      host: 'localhost',
+      port: '8080',
+      level: 'silly'
+    }
+  },
+  Mongo: {
+    type: 'MongoDB',
+    opts: {
+      level: 'error',
+      db: 'mongodb://akeros:akeros@ds011374.mlab.com:11374/agm_db'
     }
   }
 
 }
 
-test('instanciating :', function (t) {
-  t.plan(1)
-  var logger = index(conf)
+/*
+//web endpoint
+var winstond = require('winstond')
 
-  t.ok(logger)
-  logger.silly('coucou')
-  logger.info('waow')
-  
+var http = winstond.http.createServer({
+  services: ['collect', 'query', 'stream'],
+  port: 8080
+})
+
+http.add(winstond.transports.Console, {})
+http.listen()
+*/
+
+test('instanciating :', function (t) {
+  //var winston = require('winston')
+    var Logger = require('..')
+  require('winston-mail').Mail
+  require('winston-mongodb').MongoDB
+
+
+  t.plan(1)
+  var mylogger = Logger(conf)
+
+  t.ok(mylogger, 'constructor ok')
+  mylogger.error('waow')
+  mylogger.silly('error')
+  t.end()
 })
