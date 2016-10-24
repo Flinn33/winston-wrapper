@@ -3,6 +3,7 @@ Wrapping the [winston module](https://www.npmjs.com/package/winston).
 
 The wrapper is for creating as many winston transport as you wish by passing a JSON argument (like in a config file)
 It is made for easily changing parameters for logging when changing environnement without touching the logging code
+The return object is simply a winston Logger, so you can still use all of its methods (like removing/adding transport, setting levels...)
 
 ### Usage
 
@@ -69,3 +70,51 @@ var conf = {
 var mylogger = Logger(conf)
 ```
 
+By default, the colors and levels used for logging are as follow : 
+```sh
+var setup = {
+  levels: {
+    error: 0,
+    debug: 1,
+    warn: 2,
+    data: 3,
+    info: 4,
+    verbose: 5,
+    silly: 6
+  },
+  colors: {
+    error: 'red',
+    debug: 'blue',
+    warn: 'yellow',
+    data: 'grey',
+    info: 'green',
+    verbose: 'cyan',
+    silly: 'magenta'
+  }
+}
+```
+
+You can modify them using the winston method once the logger is created (configure(), setLevels()...see doc) or use
+the methods setLevels() and setColors() before passing the JSON
+
+```sh
+var Logger = require('winston-wrapper')
+Logger.setLevels({
+    error: 0,
+    debug: 1,
+    warn: 2,
+    data: 3,
+    info: 4,
+    verbose: 5,
+    silly: 6
+  })
+Logger.setColors({
+    error: 'red',
+    debug: 'blue',
+    warn: 'yellow',
+    data: 'grey',
+    info: 'green',
+    verbose: 'cyan',
+    silly: 'magenta'
+  })
+```
