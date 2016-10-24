@@ -5,8 +5,9 @@ var goodConf =
 {
   konsole: {
     type: 'Console',
+    instance: 'default',
     opts: {
-      level: 'wutwat',
+      level: 'silly',
       colorize: true,
       json: false,
       handleExceptions: true,
@@ -25,78 +26,102 @@ var goodConf =
       maxFiles: 5
     }
   },
-  http: {
-    type: 'Http',
+  anotherfile: {
+    type: 'File',
+    instance: 'category1',
     opts: {
-      level: 'warn',
-      host: 'localhost',
-      port: '8080',
-      level: 'silly'
+      name: 'first',
+      filename: 'test_shared.log',
+      level: 'silly',
+      json: false,
+      handleExceptions: true,
+      maxsize: 1048576,
+      maxFiles: 5
+    }
+  },
+  anotherconsole: {
+    type: 'Console',
+    instance: 'category1',
+    opts: {
+      colorize: true,
+    }
+  },
+  anotherfile2: {
+    type: 'File',
+    instance: 'category2',
+    opts: {
+      name: 'first',
+      filename: 'test_shared2.log',
+      level: 'silly',
+      json: false,
+      handleExceptions: true,
+      maxsize: 1048576,
+      maxFiles: 5
     }
   }
 }
 
 var badConf = {
-  toto: {
-    type: 'existepo',
-    opts: {
-      level: 'silly',
-      colorize: true,
-      json: false,
-      handleExceptions: true,
-      prettyPrint: true
+    toto: {
+      type: 'existepo',
+      opts: {
+        level: 'silly',
+        colorize: true,
+        json: false,
+        handleExceptions: true,
+        prettyPrint: true
+      }
     }
-  }
 }
 
-/*
-//web endpoint
-var winstond = require('winstond')
-
-var http = winstond.http.createServer({
-  services: ['collect', 'query', 'stream'],
-  port: 8080
-})
-
-http.add(winstond.transports.Console, {})
-http.listen()
-*/
-
 test('instanciating :', function (t) {
-
   var Logger = require('..')
-  Logger.setColors({
-    error: 'blue',
-    debug: 'red',
-    warn: 'yellow',
-    data: 'grey',
-    info: 'green',
-    verbose: 'cyan',
-    silly: 'magenta',
-    wutwat: 'white'
-  })
-  Logger.setLevels({
-    error: 0,
-    debug: 1,
-    warn: 2,
-    data: 3,
-    info: 4,
-    verbose: 5,
-    silly: 6,
-    wutwat: 7
-  })
-  
+
   t.plan(2)
-  t.throws(function() {
+  t.throws(function () {
     Logger(badConf)
   }, 'Throw on bad type')
-  var mylogger = Logger(goodConf)
-  t.ok(mylogger, 'Constructor ok')
+  var winston = Logger(goodConf)
+  t.ok(winston, 'Constructor ok')
 
-  mylogger.error('waow')
-  mylogger.silly('error')
-  mylogger.wutwat('supertest')
+  winston.error('error')
+  winston.warn('warn')
+  winston.info('info')
 
-
+  winston.loggers.get('category1').info('tesyt')
+  winston.loggers.get('category2').debug('yep')
+  require('./test2')
   t.end()
 })
+/*
+
+ instance: {
+    category1: {
+      file: {
+        type: 'File',
+        opts: {
+          name: 'first',
+          filename: 'test_instance1.log',
+          level: 'silly',
+          json: false,
+          handleExceptions: true,
+          maxsize: 1048576,
+          maxFiles: 5
+        }
+      }
+    },
+    category2: {
+      file: {
+        type: 'File',
+        opts: {
+          name: 'second',
+          filename: 'test_instance2.log',
+          level: 'silly',
+          json: false,
+          handleExceptions: true,
+          maxsize: 1048576,
+          maxFiles: 5
+        }
+      }
+    }
+  }*/
