@@ -1,7 +1,7 @@
 var Logger = require('..')
 var test = require('tape')
 
-var conf =
+var goodConf =
 {
   konsole: {
     type: 'Console',
@@ -33,15 +33,20 @@ var conf =
       port: '8080',
       level: 'silly'
     }
-  },
-  Mongo: {
-    type: 'MongoDB',
+  }
+}
+
+var badConf = {
+  toto: {
+    type: 'existepo',
     opts: {
-      level: 'error',
-      db: 'mongodb://akeros:akeros@ds011374.mlab.com:11374/agm_db'
+      level: 'silly',
+      colorize: true,
+      json: false,
+      handleExceptions: true,
+      prettyPrint: true
     }
   }
-
 }
 
 /*
@@ -58,17 +63,21 @@ http.listen()
 */
 
 test('instanciating :', function (t) {
-  //var winston = require('winston')
-    var Logger = require('..')
+
+  var Logger = require('..')
   require('winston-mail').Mail
   require('winston-mongodb').MongoDB
 
 
-  t.plan(1)
-  var mylogger = Logger(conf)
+  t.plan(2)
+  var mylogger = Logger(goodConf)
 
-  t.ok(mylogger, 'constructor ok')
+  t.ok(mylogger, 'Constructor ok')
   mylogger.error('waow')
   mylogger.silly('error')
+
+  t.throws(function() {
+    Logger(badConf)
+  }, 'Throw on bad type')
   t.end()
 })
