@@ -3,9 +3,8 @@ var test = require('tape')
 
 var goodConf =
 {
-  konsole: {
+  Console: {
     type: 'Console',
-    instance: 'default',
     opts: {
       level: 'silly',
       colorize: true,
@@ -17,8 +16,7 @@ var goodConf =
   file: {
     type: 'File',
     opts: {
-      name: 'first',
-      filename: 'test.log',
+      filename: 'alllog.log',
       level: 'silly',
       json: false,
       handleExceptions: true,
@@ -28,31 +26,22 @@ var goodConf =
   },
   anotherfile: {
     type: 'File',
-    instance: 'category1',
     opts: {
       name: 'first',
-      filename: 'test_shared.log',
-      level: 'silly',
+      filename: 'error_only.log',
+      level: 'error',
       json: false,
       handleExceptions: true,
       maxsize: 1048576,
       maxFiles: 5
     }
   },
-  anotherconsole: {
-    type: 'Console',
-    instance: 'category1',
-    opts: {
-      colorize: true,
-    }
-  },
   anotherfile2: {
     type: 'File',
-    instance: 'category2',
+    instance: 'toto',
     opts: {
-      name: 'first',
-      filename: 'test_shared2.log',
-      level: 'silly',
+      filename: 'warn_only.log',
+      level: 'warn',
       json: false,
       handleExceptions: true,
       maxsize: 1048576,
@@ -62,16 +51,16 @@ var goodConf =
 }
 
 var badConf = {
-    toto: {
-      type: 'existepo',
-      opts: {
-        level: 'silly',
-        colorize: true,
-        json: false,
-        handleExceptions: true,
-        prettyPrint: true
-      }
+  toto: {
+    type: 'existepo',
+    opts: {
+      level: 'silly',
+      colorize: true,
+      json: false,
+      handleExceptions: true,
+      prettyPrint: true
     }
+  }
 }
 
 test('instanciating :', function (t) {
@@ -82,46 +71,12 @@ test('instanciating :', function (t) {
     Logger(badConf)
   }, 'Throw on bad type')
   var winston = Logger(goodConf)
+
   t.ok(winston, 'Constructor ok')
 
   winston.error('error')
   winston.warn('warn')
   winston.info('info')
 
-  winston.loggers.get('category1').info('tesyt')
-  winston.loggers.get('category2').debug('yep')
-  require('./test2')
   t.end()
 })
-/*
-
- instance: {
-    category1: {
-      file: {
-        type: 'File',
-        opts: {
-          name: 'first',
-          filename: 'test_instance1.log',
-          level: 'silly',
-          json: false,
-          handleExceptions: true,
-          maxsize: 1048576,
-          maxFiles: 5
-        }
-      }
-    },
-    category2: {
-      file: {
-        type: 'File',
-        opts: {
-          name: 'second',
-          filename: 'test_instance2.log',
-          level: 'silly',
-          json: false,
-          handleExceptions: true,
-          maxsize: 1048576,
-          maxFiles: 5
-        }
-      }
-    }
-  }*/

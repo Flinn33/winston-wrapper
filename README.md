@@ -28,7 +28,6 @@ var goodConf =
       filename: 'test.log',
       level: 'silly',
       json: false,
-      handleExceptions: true,
       maxsize: 1048576,
       maxFiles: 5
     }
@@ -41,12 +40,19 @@ var goodConf =
       port: '8080',
       level: 'silly'
     }
+  },
+  exception: {
+     type: 'File',
+    opts: {
+      filename: 'exception.log',
+    }
   }
 }
 var mylogger = Logger(conf)
 ```
 This will instantiate a logger with 3 transports.
-  - Type : the name of the transport to use.
+  - type : the name of the transport to use.
+  - instance : you can add an exceptionHandlers by setting this property to 'exception'
   - opts : the options supported by the transport defined by Type.
   
 View [here](https://github.com/winstonjs/winston/blob/master/docs/transports.md#winston-core) to see all type and all options.
@@ -70,51 +76,6 @@ var conf = {
 var mylogger = Logger(conf)
 ```
 
-By default, the colors and levels used for logging are as follow : 
-```sh
-var setup = {
-  levels: {
-    error: 0,
-    debug: 1,
-    warn: 2,
-    data: 3,
-    info: 4,
-    verbose: 5,
-    silly: 6
-  },
-  colors: {
-    error: 'red',
-    debug: 'blue',
-    warn: 'yellow',
-    data: 'grey',
-    info: 'green',
-    verbose: 'cyan',
-    silly: 'magenta'
-  }
-}
-```
-
-You can modify them using the winston method once the logger is created (configure(), setLevels()...see doc) or use
-the methods setLevels() and setColors() before passing the JSON
-
-```sh
-var Logger = require('winston-wrapper')
-Logger.setLevels({
-    error: 0,
-    debug: 1,
-    warn: 2,
-    data: 3,
-    info: 4,
-    verbose: 5,
-    silly: 6
-  })
-Logger.setColors({
-    error: 'red',
-    debug: 'blue',
-    warn: 'yellow',
-    data: 'grey',
-    info: 'green',
-    verbose: 'cyan',
-    silly: 'magenta'
-  })
-```
+By default :
+  - the colors and levels used for logging are the npm basic ones. You can modify them using the winston method once the logger is created (configure(), setLevels()...see doc)
+  - has the property 'exitOnError' set to false
