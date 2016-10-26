@@ -64,8 +64,6 @@ var badConf = {
 }
 
 test('instanciating :', function (t) {
-  var Logger = require('..')
-
   t.plan(2)
   t.throws(function () {
     Logger(badConf)
